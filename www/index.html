@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+    Agenda de actividades - Apache Cordova
+    Este archivo es la ÚNICA página de la app (Single Page Application).
+    Las dos "pantallas" son dos <main class="vista">; JavaScript muestra una y oculta la otra.
+-->
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <!--
+        Content-Security-Policy: reglas de seguridad de la WebView.
+        connect-src permite hacer peticiones HTTP/HTTPS (por ejemplo, a una API REST).
+    -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; connect-src 'self' http: https:;">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="color-scheme" content="light">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Agenda</title>
+</head>
+<body>
+
+    <!-- Barra superior: se comparte entre las dos pantallas -->
+    <header class="barra">
+        <button id="btn-volver" class="btn-icono oculto" aria-label="Volver">&#8592;</button>
+        <h1 id="titulo-vista">Mi agenda</h1>
+    </header>
+
+    <!-- ========== PANTALLA 1: LISTA DE ACTIVIDADES ========== -->
+    <main id="vista-lista" class="vista activa">
+
+        <!-- Filtros: cambian qué actividades se muestran -->
+        <div class="filtros">
+            <button class="chip activo" data-filtro="todas">Todas</button>
+            <button class="chip" data-filtro="pendientes">Pendientes</button>
+            <button class="chip" data-filtro="completadas">Completadas</button>
+        </div>
+
+        <p id="contador" class="contador"></p>
+
+        <!-- La lista se llena desde JavaScript (listado dinámico) -->
+        <ul id="lista-actividades" class="lista"></ul>
+
+        <p id="lista-vacia" class="vacio oculto">
+            No hay actividades aquí.<br>Toque <strong>+</strong> para agregar una.
+        </p>
+
+        <!-- Botón flotante para ir a la pantalla 2 -->
+        <button id="btn-nueva" class="fab" aria-label="Nueva actividad">+</button>
+    </main>
+
+    <!-- ========== PANTALLA 2: FORMULARIO NUEVA ACTIVIDAD ========== -->
+    <main id="vista-form" class="vista">
+        <!-- novalidate: la validación la hacemos nosotros en JavaScript -->
+        <form id="form-actividad" novalidate>
+
+            <label for="campo-titulo">Título *</label>
+            <input id="campo-titulo" name="titulo" type="text" maxlength="60"
+                   placeholder="Ej: Reunión del proyecto">
+            <small class="error" id="error-titulo"></small>
+
+            <div class="fila">
+                <div>
+                    <label for="campo-fecha">Fecha *</label>
+                    <input id="campo-fecha" name="fecha" type="date">
+                    <small class="error" id="error-fecha"></small>
+                </div>
+                <div>
+                    <label for="campo-hora">Hora *</label>
+                    <input id="campo-hora" name="hora" type="time">
+                    <small class="error" id="error-hora"></small>
+                </div>
+            </div>
+
+            <label for="campo-categoria">Categoría *</label>
+            <select id="campo-categoria" name="categoria">
+                <option value="">-- Elija una --</option>
+                <option value="Universidad">Universidad</option>
+                <option value="Trabajo">Trabajo</option>
+                <option value="Personal">Personal</option>
+                <option value="Otro">Otro</option>
+            </select>
+            <small class="error" id="error-categoria"></small>
+
+            <label for="campo-descripcion">Descripción (opcional)</label>
+            <textarea id="campo-descripcion" name="descripcion" rows="3" maxlength="200"
+                      placeholder="Detalles de la actividad"></textarea>
+
+            <button type="submit" class="btn-primario">Guardar actividad</button>
+        </form>
+    </main>
+
+    <!-- Mensaje temporal ("toast") para dar respuesta visual -->
+    <div id="aviso" class="aviso"></div>
+
+    <!-- cordova.js lo agrega Cordova al compilar: NO existe en la carpeta www, es normal -->
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
